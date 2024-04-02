@@ -19,7 +19,7 @@ const typeDefs = gql`
   }
 #################################### Query & mutation ################################
   type Query {
-    getUsers(_id: String!): User
+    getUsers(_id:String!):User
   }
 
   type Mutation {

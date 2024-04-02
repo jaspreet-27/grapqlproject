@@ -250,11 +250,11 @@ export default class UserService implements IuserService.IUserServiceAPI {
             error: ErrorMessageEnum.RECORD_NOT_FOUND
           };
         }
-
-        return {
-          status: StatusCodeEnum.OK,
-          delete: "success fully deleted"
-
+        if (deleteUser) {
+          return {
+            status: StatusCodeEnum.OK,
+            delete: "success fully deleted"
+          }
         }
       } catch (e) {
         console.error(e);
@@ -277,46 +277,46 @@ export default class UserService implements IuserService.IUserServiceAPI {
       };
     }
   }
-  //   public getUsers= async (
-  //     request: IuserService.IGetUserRequest): Promise<IuserService.IGetUserResponse> => {
-  //     const response: IuserService.IGetUserResponse = {
-  //       status: StatusCodeEnum.UNKNOWN_CODE,
-  //     };
+    public getUsers= async (
+      request: IuserService.IGetUserRequest): Promise<IuserService.IGetUserResponse> => {
+      const response: IuserService.IGetUserResponse = {
+        status: StatusCodeEnum.UNKNOWN_CODE,
+      };
 
-  //     const schema = Joi.object().keys({
-  //       _id: Joi.string().required(),
-  //     });
+      const schema = Joi.object().keys({
+        _id: Joi.string().required(),
+      });
 
-  //     const params = schema.validate(request);
-  //     if (params.error) {
-  //       console.error(params.error);
-  //       response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
-  //       response.error = params.error;
-  //       return response;
-  //     }
+      const params = schema.validate(request);
+      if (params.error) {
+        console.error(params.error);
+        response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
+        response.error = params.error;
+        return response;
+      }
 
-  //     const { _id } = params.value;
-  //     let user: IUser;
-  //     try {
-  //       user = await this.storage.get({ _id });
+      const { _id } = params.value;
+      let user: IUser;
+      try {
+        user = await this.storage.get({ _id });
 
-  //       //if user's id is incorrect
-  //       if (!user) {
-  //         const errorMsg = ErrorMessageEnum.INVALID_USER_ID;
-  //         response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
-  //         response.error = toError(errorMsg);
-  //         return response;
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //       response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
-  //       response.error = toError(e.message);
-  //       return response;
-  //     }
-  //     response.status = StatusCodeEnum.OK;
-  //     response.user = user;
-  //     return response;
-  //   };
+        //if user's id is incorrect
+        if (!user) {
+          const errorMsg = ErrorMessageEnum.INVALID_USER_ID;
+          response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
+          response.error = toError(errorMsg);
+          return response;
+        }
+      } catch (e) {
+        console.error(e);
+        response.status = StatusCodeEnum.UNPROCESSABLE_ENTITY;
+        response.error = toError(e.message);
+        return response;
+      }
+      response.status = StatusCodeEnum.OK;
+      response.user = user;
+      return response;
+    };
 
 
 

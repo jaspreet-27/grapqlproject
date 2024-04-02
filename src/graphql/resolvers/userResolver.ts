@@ -7,19 +7,26 @@ import { response } from "express";
 
 
 export default {
-  // Query: {
-  //   async getUsers(parent, args) {
-  //     try {
-  //       const response = await proxy.user.getUsers(); // Assuming getUsers method exists in proxy.user
-  //       if (response.status !== StatusCodeEnum.OK) {
-  //         throw new ApolloError(response.error.message);
-  //       }
-  //       return response;
-  //     } catch (error) {
-  //       throw new ApolloError(error.message);
-  //     }
-  //   }
-  // },
+  Query: {
+    async getUsers(parent, args) {
+      const { _id } = args;
+      const request: IUserService.IGetUserRequest= {_id};
+  
+        let response: IUserService.IGetUserResponse;
+      
+      try {
+         response = await proxy.user.getUsers({_id}); 
+        if (response.status !== StatusCodeEnum.OK) {
+          throw new ApolloError(response.error.message);
+        }
+        return response.user;
+      } catch (error) {
+        throw new ApolloError(error.message);
+      }
+    }
+
+    
+  },
 
   Mutation: {
     async createUser(parent, args) {
@@ -48,7 +55,7 @@ export default {
         throw e;
       }
 
-      return response;
+      return response.user;
     },
     async updateUser(parent, args) {
       const { _id ,update} = args;
@@ -86,4 +93,7 @@ export default {
         throw new ApolloError(error.message);
       }
     }
+
+
+        
 }};

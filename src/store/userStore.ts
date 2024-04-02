@@ -76,7 +76,16 @@ export default class UserStore {
       throw new Error(ErrorMessageEnum.DATABASE_ERROR);
     }
   }
-
+  
+  public async get(attribute: IUser): Promise<IUser> {
+    let user: IUser;
+    try {
+      user = await User.findOne({_id :attribute._id}).lean();
+    } catch (e) {
+      return Promise.reject(new UserStore.OPERATION_UNSUCCESSFUL());
+    }
+    return user;
+  }
   //   public async deleteUser(_id: string): Promise<IUserModel | null> {
   //     try {
   //       // Find the user by userId
