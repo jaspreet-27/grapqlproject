@@ -7,6 +7,7 @@ export interface IUserServiceAPI {
   updateUser(request: IUpdateUserRequest): Promise<IUpdateUserResponse>;
   deleteUser(request: IDeleteUserRequest): Promise<IDeleteUserResponse>
   getUsers(request: IGetUserRequest): Promise<IGetUserResponse>
+  getAllusers(request:IGetAllUserRequest):Promise<IGetAllUserResponse>
 
 
 }
@@ -53,6 +54,16 @@ export interface IGetUserResponse extends IResponse {
   error?: any;
 
 }
+
+export interface IGetAllUserRequest extends IRequest {
+
+};
+export interface IGetAllUserResponse extends IResponse {
+  user?:IUser[]
+  error?: any;
+
+}
+
 
 
 

@@ -20,6 +20,7 @@ const typeDefs = gql`
 #################################### Query & mutation ################################
   type Query {
     getUsers(_id:String!):User
+    getallusers:[User]
   }
 
   type Mutation {

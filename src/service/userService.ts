@@ -15,12 +15,10 @@ export default class UserService implements IuserService.IUserServiceAPI {
   constructor(proxy: ServiceProxy) {
     this.proxy = proxy;
   }
-
   public createUser = async (request: IuserService.IRegisterUserRequest): Promise<IuserService.IRegisterUserResponse> => {
     const response: IuserService.IRegisterUserResponse = {
       status: StatusCodeEnum.UNKNOWN_CODE
     };
-
     try {
       const schema = Joi.object().keys({
         Name: Joi.string().required(),
@@ -39,23 +37,6 @@ export default class UserService implements IuserService.IUserServiceAPI {
 
       const { Name, email, password } = params.value;
       let existingUser: IUser;
-
-      // try {
-      //   existingUser = await this.storage.getByAttributes({ email });
-      //   if (existingUser) {
-      //     return {
-      //       status: StatusCodeEnum.CONFLICT,
-      //       error: ErrorMessageEnum.USER_ALREADY_EXISTS
-      //     };
-      //   }
-      // } catch (e) {
-      //   console.error(e);
-      //   return {
-      //     status: StatusCodeEnum.INTERNAL_SERVER_ERROR,
-      //     error: ErrorMessageEnum.DATABASE_ERROR
-      //   };
-      // }
-
       const attributes = { Name, email, password };
       let user: IUser;
 
@@ -277,6 +258,8 @@ export default class UserService implements IuserService.IUserServiceAPI {
       };
     }
   }
+
+  
     public getUsers= async (
       request: IuserService.IGetUserRequest): Promise<IuserService.IGetUserResponse> => {
       const response: IuserService.IGetUserResponse = {
@@ -318,6 +301,35 @@ export default class UserService implements IuserService.IUserServiceAPI {
       return response;
     };
 
+
+
+    
+    public getAllusers = async (): Promise<IuserService.IGetAllUserResponse> => {
+      const response: IuserService.IGetAllUserResponse = {
+        status: StatusCodeEnum.UNKNOWN_CODE,
+      };
+    
+      try {
+        const users = await this.storage.getAll(); 
+    
+        if (!users || users.length === 0) { 
+          const errorMsg = ErrorMessageEnum.RECORD_NOT_FOUND;
+          response.status = StatusCodeEnum.NOT_FOUND;
+          response.error = toError(errorMsg);
+          return response;
+        }
+    if(users){
+        response.status = StatusCodeEnum.OK;
+        response.user = users; 
+        return response}
+      } catch (e) {
+        console.error(e);
+        response.status = StatusCodeEnum.INTERNAL_SERVER_ERROR;
+        response.error = toError(e.message);
+        return response;
+      }
+    };
+    
 
 
   // }

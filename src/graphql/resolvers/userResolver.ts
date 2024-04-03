@@ -3,7 +3,7 @@ import { ApolloError } from "apollo-server-express";
 import StatusCodeEnum from "../../enums/statuscodeenum";
 import proxy from "../../service/serverproxy";
 import * as IUserService from "../../service/IUserService";
-import { response } from "express";
+import { request, response } from "express";
 
 
 export default {
@@ -23,10 +23,42 @@ export default {
       } catch (error) {
         throw new ApolloError(error.message);
       }
-    }
+    },
 
+
+  //   async getallUsers(parent, args) {
+      
+  //     const request:IUserService.IGetAllUserRequest={}
+  
+  //     let response: IUserService.IGetAllUserResponse=
+      
+  //     try {
+  //        response= await proxy.user.getUsers(request); 
+  //       if (response.status !== StatusCodeEnum.OK) {
+  //         throw new ApolloError(response.error.message);
+  //       }
+  //       return response.user;
+  //     } catch (error) {
+  //       throw new ApolloError(error.message);
+  //     }
+  //   }
+  async getAllUsers(parent, args) {
+    const request: IUserService.IGetAllUserRequest = {};
+  
+    try {
+      const response = await proxy.user.getAllusers(request);
+      if (response.status !== StatusCodeEnum.OK) {
+        throw new ApolloError(response.error.message);
+      }
+      return response.user; // Corrected property name
+    } catch (error) {
+      throw new ApolloError(error.message);
+    }
+  }
+  
     
   },
+  // },
 
   Mutation: {
     async createUser(parent, args) {

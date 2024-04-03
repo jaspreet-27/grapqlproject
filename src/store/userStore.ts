@@ -86,33 +86,27 @@ export default class UserStore {
     }
     return user;
   }
-  //   public async deleteUser(_id: string): Promise<IUserModel | null> {
-  //     try {
-  //       // Find the user by userId
-  //       const userDelete = await User.findByIdAndDelete({ _id });
 
-  //       if (!userDelete) {
-  //         // If user not found, return null or throw an error
-  //         console.error(ErrorMessageEnum.RECORD_NOT_FOUND);
-  //         throw new Error(ErrorMessageEnum.RECORD_NOT_FOUND);
-  //       }
 
-  //       // Update the user fields
-  //       Object.assign(userDelete);
-
-  //       // Save the updated user
-  //       // const updatedUser = await userDelete.save();
-
-  //       return userDelete;
-  //     } catch (error) {
-  //       console.error(error);
-  //       // Handle errors appropriately, return null or throw an error
-  //       throw new Error(ErrorMessageEnum.DATABASE_ERROR);
-  //     }
+  // public async getAll(attribute: IUser): Promise<IUser> {
+  //   let user: IUser;
+  //   try {
+  //     user = await User.find().lean();
+  //   } catch (e) {
+  //     return Promise.reject(new UserStore.OPERATION_UNSUCCESSFUL());
   //   }
-
+  //   return user;
   // }
-
+  public async getAll(): Promise<IUser[]> {
+    try {
+      const users = await User.find().lean().exec(); // Corrected Mongoose query
+      return users;
+    } catch (e) {
+      console.error(e);
+      throw new UserStore.OPERATION_UNSUCCESSFUL();
+    }
+  }
+  
 
   public async deleteUser(_id: string): Promise<IUserModel | null> {
     try {
